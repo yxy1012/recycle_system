@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.CollectorDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.Collector">
+    <id column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Site_ID" jdbcType="INTEGER" property="siteId" />
+    <result column="Collect or_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="IDcard_Number" jdbcType="VARCHAR" property="idcardNumber" />
+    <result column="Photo" jdbcType="VARCHAR" property="photo" />
+    <result column="User_Status" jdbcType="VARCHAR" property="userStatus" />
+  </resultMap>
+  <resultMap id="RecyclesiteMap" type="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    <id column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Site_ID" javaType="INTEGER" property="siteId"/>
+    <result column="Site_Name" jdbcType="VARCHAR" property="siteName"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    Collector_Person_ID, Site_ID, Collector_Name, User_Name, `Password`, Phone, IDcard_Number,
+    Photo, User_Status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from collector
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserName" resultType="com.example.recycle_system_springboot.pojo.entity.Collector">
+    select
+    <include refid="Base_Column_List" />
+    from collector
+    where User_Name = #{username,jdbcType=INTEGER}
+  </select>
+  <select id="selectRecyclesite" resultType="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    select
+    c.Collector_Person_ID,c.Site_ID,c.Collector_Name,c.User_Name,c.Phone,r.Site_Name
+    from collector c
+    left join recycle_site r
+    on c.Site_ID=r.Site_ID
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.entity.Collector">
+    select
+    <include refid="Base_Column_List" />
+    from collector
+    where User_Status="T"
+  </select>
+  <select id="selectBycollectorname" resultType="java.lang.Integer">
+    select
+    Collector_Person_ID
+    from collector
+    where Collector_Name=#{collectorname,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllCollector" resultType="com.example.recycle_system_springboot.pojo.vo.CollectorVo">
+    select
+      c.Collector_Person_ID,c.Collector_Name,c.User_Name,c.IDcard_Number,c.Phone,c.User_Status,r.Site_Name
+    from collector c
+    left join recycle_site r
+    on c.Site_ID=r.Site_ID
+  </select>
+  <select id="selectBysiteid" resultType="java.lang.Integer">
+    select
+    Collector_Person_ID
+    from collector
+    where Site_ID=#{siteid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from collector
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Collector_Person_ID" keyProperty="collectorPersonId" parameterType="com.example.recycle_system_springboot.pojo.entity.Collector" useGeneratedKeys="true">
+    insert into collector (Site_ID, Collector_Name, User_Name,
+      `Password`, Phone, IDcard_Number,
+      Photo, User_Status)
+    values (#{siteId,jdbcType=INTEGER}, #{collectorName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{idcardNumber,jdbcType=VARCHAR},
+      #{photo,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="Collector_Person_ID" keyProperty="collectorPersonId" parameterType="com.example.recycle_system_springboot.pojo.entity.Collector" useGeneratedKeys="true">
+    insert into collector
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="siteId != null">
+        Site_ID,
+      </if>
+      <if test="collectorName != null">
+        Collector_Name,
+      </if>
+      <if test="userName != null">
+        User_Name,
+      </if>
+      <if test="password != null">
+        `Password`,
+      </if>
+      <if test="phone != null">
+        Phone,
+      </if>
+      <if test="idcardNumber != null">
+        IDcard_Number,
+      </if>
+      <if test="photo != null">
+        Photo,
+      </if>
+      <if test="userStatus != null">
+        User_Status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="siteId != null">
+        #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorName != null">
+        #{collectorName,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardNumber != null">
+        #{idcardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null">
+        #{userStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.Collector">
+    update collector
+    <set>
+      <if test="siteId != null">
+        Site_ID = #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorName != null">
+        Collector_Name = #{collectorName,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        User_Name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `Password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardNumber != null">
+        IDcard_Number = #{idcardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null">
+        Photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null">
+        User_Status = #{userStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.Collector">
+    update collector
+    set Site_ID = #{siteId,jdbcType=INTEGER},
+      Collector_Name = #{collectorName,jdbcType=VARCHAR},
+      User_Name = #{userName,jdbcType=VARCHAR},
+      `Password` = #{password,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      IDcard_Number = #{idcardNumber,jdbcType=VARCHAR},
+      Photo = #{photo,jdbcType=VARCHAR},
+      User_Status = #{userStatus,jdbcType=VARCHAR}
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+  <update id="updatePhoneByPrimaykey">
+    update collector
+    set Phone = #{phone,jdbcType=VARCHAR}
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+  <update id="updateStatusByPrimaykey">
+    update collector
+    set User_Status = #{userStatus,jdbcType=VARCHAR}
+    where Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER}
+  </update>
+</mapper>

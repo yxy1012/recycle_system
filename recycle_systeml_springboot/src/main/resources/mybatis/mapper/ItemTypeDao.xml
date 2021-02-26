@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.ItemTypeDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.ItemType">
+    <id column="Item_Type_ID" jdbcType="INTEGER" property="itemTypeId" />
+    <result column="Item_Type_Name" jdbcType="VARCHAR" property="itemTypeName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Item_Type_ID, Item_Type_Name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from item_type
+    where Item_Type_ID = #{itemTypeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.entity.ItemType">
+    select
+    <include refid="Base_Column_List" />
+    from item_type
+  </select>
+  <select id="selectByName" resultType="com.example.recycle_system_springboot.pojo.entity.ItemType">
+    select
+    <include refid="Base_Column_List" />
+    from item_type
+    where Item_Type_Name= #{itemtypename,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from item_type
+    where Item_Type_ID = #{itemTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Item_Type_ID" keyProperty="itemTypeId" parameterType="com.example.recycle_system_springboot.pojo.entity.ItemType" useGeneratedKeys="true">
+    insert into item_type (Item_Type_Name)
+    values (#{itemTypeName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="Item_Type_ID" keyProperty="itemTypeId" parameterType="com.example.recycle_system_springboot.pojo.entity.ItemType" useGeneratedKeys="true">
+    insert into item_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itemTypeName != null">
+        Item_Type_Name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itemTypeName != null">
+        #{itemTypeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.ItemType">
+    update item_type
+    <set>
+      <if test="itemTypeName != null">
+        Item_Type_Name = #{itemTypeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Item_Type_ID = #{itemTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.ItemType">
+    update item_type
+    set Item_Type_Name = #{itemTypeName,jdbcType=VARCHAR}
+    where Item_Type_ID = #{itemTypeId,jdbcType=INTEGER}
+  </update>
+</mapper>

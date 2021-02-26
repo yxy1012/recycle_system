@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.UserDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.User">
+    <id column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="User_RealName" jdbcType="VARCHAR" property="userRealname" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap id="AddressResultMap" type="com.example.recycle_system_springboot.pojo.vo.UserVo">
+    <id column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="User_RealName" jdbcType="VARCHAR" property="userRealname" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+    <collection property="addressList" ofType="com.example.recycle_system_springboot.pojo.vo.AddressVo">
+
+      <result column="Address_ID" javaType="INTEGER" property="addressId"/>
+
+      <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    </collection>
+  </resultMap>
+  <resultMap id="AllUser" type="com.example.recycle_system_springboot.pojo.entity.User">
+    <id column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="User_RealName" jdbcType="VARCHAR" property="userRealname" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    User_ID, User_Name, User_RealName, `Password`, Phone
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where User_ID = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserName" resultType="com.example.recycle_system_springboot.pojo.entity.User">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where User_Name = #{username,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllUser" resultMap="AllUser">
+    select *
+    from user
+  </select>
+   <select id="selectAddress" resultMap="AddressResultMap">
+    select
+    u.User_ID,u.User_name,u.User_RealName,u.Password,u.Phone,a.Address_Details,a.Address_ID
+    from user u
+    left join address a
+    on u.User_ID=a.User_ID
+    where u.User_ID = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectSum" resultType="java.lang.Integer">
+    select count(*)
+    from user
+  </select>
+  <select id="selectAll" resultType="com.example.recycle_system_springboot.pojo.entity.User">
+    select
+    User_ID, User_Name, User_RealName, Phone
+    from user
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where User_ID = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="User_ID" keyProperty="userId" parameterType="com.example.recycle_system_springboot.pojo.entity.User" useGeneratedKeys="true">
+    insert into user (User_Name, User_RealName, `Password`,
+      Phone)
+    values (#{userName,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="User_ID" keyProperty="userId" parameterType="com.example.recycle_system_springboot.pojo.entity.User" useGeneratedKeys="true">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        User_Name,
+      </if>
+      <if test="userRealname != null">
+        User_RealName,
+      </if>
+      <if test="password != null">
+        `Password`,
+      </if>
+      <if test="phone != null">
+        Phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userRealname != null">
+        #{userRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.User">
+    update user
+    <set>
+      <if test="userName != null">
+        User_Name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userRealname != null">
+        User_RealName = #{userRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `Password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where User_ID = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.User">
+    update user
+    set User_Name = #{userName,jdbcType=VARCHAR},
+      User_RealName = #{userRealname,jdbcType=VARCHAR},
+      `Password` = #{password,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR}
+    where User_ID = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updatePhoneByPrimaryKey">
+    update user
+    set Phone = #{phone,jdbcType=VARCHAR}
+    where User_ID = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

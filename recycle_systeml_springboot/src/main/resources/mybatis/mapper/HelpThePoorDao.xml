@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.HelpThePoorDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.HelpThePoor">
+    <id column="Help_ID" jdbcType="INTEGER" property="helpId" />
+    <result column="Help_Name" jdbcType="VARCHAR" property="helpName" />
+    <result column="Longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="Latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="Help_Detail" jdbcType="VARCHAR" property="helpDetail" />
+    <result column="Help_Status" jdbcType="VARCHAR" property="helpStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Help_ID, Help_Name, Longitude, Latitude, Help_Detail, Help_Status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from help_the_poor
+    where Help_ID = #{helpId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from help_the_poor
+  </select>
+  <select id="selectAllHelp"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from help_the_poor
+    where Help_Status="启用"
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from help_the_poor
+    where Help_ID = #{helpId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Help_ID" keyProperty="helpId" parameterType="com.example.recycle_system_springboot.pojo.entity.HelpThePoor" useGeneratedKeys="true">
+    insert into help_the_poor (Help_Name, Longitude, Latitude,
+      Help_Detail, Help_Status)
+    values (#{helpName,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE},
+      #{helpDetail,jdbcType=VARCHAR}, #{helpStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="Help_ID" keyProperty="helpId" parameterType="com.example.recycle_system_springboot.pojo.entity.HelpThePoor" useGeneratedKeys="true">
+    insert into help_the_poor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="helpName != null">
+        Help_Name,
+      </if>
+      <if test="longitude != null">
+        Longitude,
+      </if>
+      <if test="latitude != null">
+        Latitude,
+      </if>
+      <if test="helpDetail != null">
+        Help_Detail,
+      </if>
+      <if test="helpStatus != null">
+        Help_Status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="helpName != null">
+        #{helpName,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="helpDetail != null">
+        #{helpDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="helpStatus != null">
+        #{helpStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.HelpThePoor">
+    update help_the_poor
+    <set>
+      <if test="helpName != null">
+        Help_Name = #{helpName,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        Longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null">
+        Latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="helpDetail != null">
+        Help_Detail = #{helpDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="helpStatus != null">
+        Help_Status = #{helpStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Help_ID = #{helpId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.HelpThePoor">
+    update help_the_poor
+    set Help_Name = #{helpName,jdbcType=VARCHAR},
+      Longitude = #{longitude,jdbcType=DOUBLE},
+      Latitude = #{latitude,jdbcType=DOUBLE},
+      Help_Detail = #{helpDetail,jdbcType=VARCHAR},
+      Help_Status = #{helpStatus,jdbcType=VARCHAR}
+    where Help_ID = #{helpId,jdbcType=INTEGER}
+  </update>
+</mapper>

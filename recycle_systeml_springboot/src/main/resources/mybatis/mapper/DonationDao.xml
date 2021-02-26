@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.DonationDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.Donation">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Help_ID" jdbcType="INTEGER" property="helpId" />
+    <result column="User_ID" jdbcType="INTEGER" property="userId" />
+    <result column="Collector_Person_ID" jdbcType="INTEGER" property="collectorPersonId" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+  </resultMap>
+  <resultMap id="UserAllMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Help_Name" jdbcType="VARCHAR" property="helpName" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap id="UserDoingMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap id="CollectorAllMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap id="collectorDoingMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+    <result column="Phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap id="adminAllMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Finished_Time" jdbcType="TIMESTAMP" property="finishedTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+  </resultMap>
+  <resultMap id="adminDoingMap" type="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    <id column="Donate_ID" jdbcType="INTEGER" property="donateId" />
+    <result column="Address_ID" jdbcType="INTEGER" property="addressId" />
+    <result column="Address_Details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="User_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="Collector_Name" jdbcType="VARCHAR" property="collectorName" />
+    <result column="Evaluation_ID" jdbcType="INTEGER" property="evaluationId" />
+    <result column="Scheduled_Time" jdbcType="TIMESTAMP" property="scheduledTime" />
+    <result column="Donate_Detail" jdbcType="VARCHAR" property="donateDetail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Donate_ID, Help_ID, User_ID, Collector_Person_ID, Evaluation_ID, Address_ID, Scheduled_Time,
+    Finished_Time, Donate_Detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from donation
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByuser" resultMap="UserAllMap">
+    select
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,c.Collector_Name,c.Phone,h.Help_Name,a.Address_Details
+    from donation d
+    left join collector c
+    on d.Collector_Person_ID=c.Collector_Person_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
+    where d.User_ID= #{userid,jdbcType=INTEGER}
+    <if test="collectorname != ''and collectorname!=null">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by d.Scheduled_Time asc
+  </select>
+  <select id="selectDoingByuser" resultMap="UserDoingMap">
+    select
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,c.Collector_Name,c.Phone,h.Help_Name,a.Address_Details
+    from donation d
+    left join collector c
+    on d.Collector_Person_ID=c.Collector_Person_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
+    where d.User_ID= #{userid,jdbcType=INTEGER} and d.Finished_Time is null
+    <if test="collectorname != ''and collectorname!=null">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by d.Scheduled_Time asc
+  </select>
+  <select id="selectAllBycollector" resultMap="CollectorAllMap">
+    select
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone,h.Help_Name,a.Address_Details
+    from donation d
+    left join user u
+    on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
+    where d.Collector_Person_ID= #{collectorid,jdbcType=INTEGER}
+    <if test="username != ''and username!=null">
+      and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by d.Scheduled_Time asc
+  </select>
+  <select id="selectDoingBycollector" resultMap="collectorDoingMap">
+    select
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,u.User_Name,u.Phone,h.Help_Name,a.Address_Details
+    from donation d
+    left join user u
+    on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
+    where d.Collector_Person_ID= #{collectorid,jdbcType=INTEGER} and d.Finished_Time is null
+    <if test="username != ''and username!=null">
+      and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by d.Scheduled_Time asc
+  </select>
+  <select id="selectAllByadmin" resultType="com.example.recycle_system_springboot.pojo.vo.DonationVo">
+    select
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Finished_Time,u.User_Name,Donate_Detail,d.Evaluation_ID,c.Collector_Name,h.Help_Name,a.Address_Details
+    from donation d
+    left join collector c
+    on d.Collector_Person_ID=c.Collector_Person_ID
+    left join user u
+    on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
+    where d.Donate_ID is not null
+    <if test="username!=null and username!=''">
+      and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="collectorname != ''and collectorname!=null">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by d.Scheduled_Time asc
+  </select>
+  <select id="selectDoingByadmin" resultMap="adminDoingMap">
+    select
+    d.Donate_ID,d.Address_ID,d.Scheduled_Time,d.Donate_Detail,d.Evaluation_ID,c.Collector_Name,u.User_Name,h.Help_Name,a.Address_Details
+    from donation d
+    left join collector c
+    on d.Collector_Person_ID=c.Collector_Person_ID
+    left join user u
+    on d.User_ID=u.User_ID
+    left join help_the_poor h
+    on d.Help_ID=h.Help_ID
+    left join address a
+    on d.Address_ID=a.Address_ID
+    where d.Finished_Time is null
+    <if test="username!=null and username!=''">
+      and u.User_Name like "%"#{username,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="collectorname != ''and collectorname!=null">
+      and c.Collector_Name like "%"#{collectorname,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="datepick=='day' and date!=''and date!=null ">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m-%d')=#{date}
+    </if>
+    <if test="datepick=='month' and date!=''and date!=null">
+      and DATE_FORMAT(d.Scheduled_Time, '%Y-%m')=#{date}
+    </if>
+    order by d.Scheduled_Time asc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from donation
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Donate_ID" keyProperty="donateId" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation" useGeneratedKeys="true">
+    insert into donation (Help_ID, User_ID, Collector_Person_ID,
+      Evaluation_ID, Address_ID, Scheduled_Time,
+      Finished_Time, Donate_Detail)
+    values (#{helpId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{collectorPersonId,jdbcType=INTEGER},
+      #{evaluationId,jdbcType=INTEGER}, #{addressId,jdbcType=INTEGER}, #{scheduledTime,jdbcType=TIMESTAMP},
+      #{finishedTime,jdbcType=TIMESTAMP}, #{donateDetail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="Donate_ID" keyProperty="donateId" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation" useGeneratedKeys="true">
+    insert into donation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="helpId != null">
+        Help_ID,
+      </if>
+      <if test="userId != null">
+        User_ID,
+      </if>
+      <if test="collectorPersonId != null">
+        Collector_Person_ID,
+      </if>
+      <if test="evaluationId != null">
+        Evaluation_ID,
+      </if>
+      <if test="addressId != null">
+        Address_ID,
+      </if>
+      <if test="scheduledTime != null">
+        Scheduled_Time,
+      </if>
+      <if test="finishedTime != null">
+        Finished_Time,
+      </if>
+      <if test="donateDetail != null">
+        Donate_Detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="helpId != null">
+        #{helpId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorPersonId != null">
+        #{collectorPersonId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        #{evaluationId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null">
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        #{scheduledTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishedTime != null">
+        #{finishedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="donateDetail != null">
+        #{donateDetail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation">
+    update donation
+    <set>
+      <if test="helpId != null">
+        Help_ID = #{helpId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        User_ID = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="collectorPersonId != null">
+        Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null">
+        Address_ID = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishedTime != null">
+        Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="donateDetail != null">
+        Donate_Detail = #{donateDetail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.Donation">
+    update donation
+    set Help_ID = #{helpId,jdbcType=INTEGER},
+      User_ID = #{userId,jdbcType=INTEGER},
+      Collector_Person_ID = #{collectorPersonId,jdbcType=INTEGER},
+      Evaluation_ID = #{evaluationId,jdbcType=INTEGER},
+      Address_ID = #{addressId,jdbcType=INTEGER},
+      Scheduled_Time = #{scheduledTime,jdbcType=TIMESTAMP},
+      Finished_Time = #{finishedTime,jdbcType=TIMESTAMP},
+      Donate_Detail = #{donateDetail,jdbcType=VARCHAR}
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </update>
+  <update id="updatecollector">
+    update donation
+    set
+    Collector_Person_ID = #{collectorid,jdbcType=INTEGER}
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByDeleteCollertor">
+    update donation
+    set
+    Collector_Person_ID = null
+    where Donate_ID = #{donateId,jdbcType=INTEGER}
+  </update>
+</mapper>

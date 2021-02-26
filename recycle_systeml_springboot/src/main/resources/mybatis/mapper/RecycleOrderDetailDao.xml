@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.recycle_system_springboot.dao.RecycleOrderDetailDao">
+  <resultMap id="BaseResultMap" type="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail">
+    <id column="Recycle_Order_Detail_ID" jdbcType="INTEGER" property="recycleOrderDetailId" />
+    <result column="Item_ID" jdbcType="INTEGER" property="itemId" />
+    <result column="Recycle_Order_ID" jdbcType="INTEGER" property="recycleOrderId" />
+    <result column="Quantity" jdbcType="DOUBLE" property="quantity" />
+  </resultMap>
+  <resultMap id="DetailResultMap" type="com.example.recycle_system_springboot.pojo.vo.RecycleOrdersDetailVo">
+    <result column="Quantity" jdbcType="DOUBLE" property="quantity" />
+    <result column="Item_Name" jdbcType="VARCHAR" property="itemName" />
+    <result column="Item_Price" jdbcType="DOUBLE" property="itemPrice" />
+  </resultMap>
+  <resultMap id="EchartsItem" type="com.example.recycle_system_springboot.pojo.vo.EchartsItemVo">
+    <result column="Item_Name" jdbcType="VARCHAR" property="name" />
+    <result column="Countquantity" jdbcType="DOUBLE" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Recycle_Order_Detail_ID, Item_ID, Recycle_Order_ID, Quantity
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from recycle_order_detail
+    where Recycle_Order_Detail_ID = #{recycleOrderDetailId,jdbcType=INTEGER}
+  </select>
+  <select id="selectDetailByRecycleOrderId" resultMap="DetailResultMap">
+    select
+    i.Item_Name,i.Item_Price,r.Quantity
+    from recycle_order_detail r
+    left join item i
+    on r.Item_ID = i.Item_ID
+    where Recycle_Order_ID= #{rerecycleOrderId,jdbcType=INTEGER}
+  </select>
+
+  <select id="adminselectCountByitemid" resultMap="EchartsItem">
+    select distinct i.Item_Name,SUM(r.Quantity) AS Countquantity
+    from recycle_order_detail r
+    left join item i
+    on r.Item_ID = i.Item_ID
+    group by (r.Item_ID)
+  </select>
+  <select id="userselectCountByitemid" resultMap="EchartsItem">
+    select distinct i.Item_Name,SUM(r.Quantity) AS Countquantity
+    from recycle_order_detail r
+    left join item i
+    on r.Item_ID = i.Item_ID
+    left join recycle_orders o
+    on r.Recycle_Order_ID = o.Recycle_Order_ID
+
+    where o.User_ID=#{rerecycleOrderId,jdbcType=INTEGER}
+    group by (r.Item_ID)
+  </select>
+  <select id="collectorselectCountByitemid" resultMap="EchartsItem">
+    select distinct i.Item_Name,SUM(r.Quantity) AS Countquantity
+    from recycle_order_detail r
+           left join item i
+                     on r.Item_ID = i.Item_ID
+           left join recycle_orders o
+                     on r.Recycle_Order_ID = o.Recycle_Order_ID
+    where o.Collector_Person_ID=#{collectorOrderId,jdbcType=INTEGER}
+    group by (r.Item_ID)
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recycle_order_detail
+    where Recycle_Order_Detail_ID = #{recycleOrderDetailId,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByRecycleOrderId">
+    delete from recycle_order_detail
+    where Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" keyColumn="Recycle_Order_Detail_ID" keyProperty="recycleOrderDetailId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail" useGeneratedKeys="true">
+
+    insert into recycle_order_detail (Item_ID, Recycle_Order_ID, Quantity
+      )
+    values (#{itemId,jdbcType=INTEGER}, #{recycleOrderId,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="Recycle_Order_Detail_ID" keyProperty="recycleOrderDetailId" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail" useGeneratedKeys="true">
+    insert into recycle_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itemId != null">
+        Item_ID,
+      </if>
+      <if test="recycleOrderId != null">
+        Recycle_Order_ID,
+      </if>
+      <if test="quantity != null">
+        Quantity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itemId != null">
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="recycleOrderId != null">
+        #{recycleOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail">
+    update recycle_order_detail
+    <set>
+      <if test="itemId != null">
+        Item_ID = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="recycleOrderId != null">
+        Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null">
+        Quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Recycle_Order_Detail_ID = #{recycleOrderDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.recycle_system_springboot.pojo.entity.RecycleOrderDetail">
+    update recycle_order_detail
+    set Item_ID = #{itemId,jdbcType=INTEGER},
+      Recycle_Order_ID = #{recycleOrderId,jdbcType=INTEGER},
+      Quantity = #{quantity,jdbcType=INTEGER}
+    where Recycle_Order_Detail_ID = #{recycleOrderDetailId,jdbcType=INTEGER}
+  </update>
+</mapper>
